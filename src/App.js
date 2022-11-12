@@ -15,10 +15,11 @@ function App() {
   };
 
   return (
-    <div>
+    // Use built-in React/JSX empty wrapper component, similiar as <React.Fragment></React.Fragment>
+    <>
       <AddUser onAddUser={addUserHandler} />
       <UsersList users={usersList} />
-    </div>
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Button from "../UI/Button";
 import Card from "../UI/Card";
 import ErrorModal from "../UI/ErrorModal";
@@ -7,13 +7,16 @@ import Wrapper from "../Helpers/Wrapper";
 import classes from "./AddUser.module.css";
 
 const AddUser = (props) => {
-  const [enteredUsername, setEnteredUsername] = useState("");
+  // Use React ref instead of state to get the value of input element
+  const usernameInputRef = useRef();
+  // Use React state to manage age input
   const [enteredAge, setEnteredAge] = useState("");
 
   const [error, setError] = useState();
 
   const addUserHandler = (event) => {
     event.preventDefault();
+    const enteredUsername = usernameInputRef.current.value;
     if (enteredUsername.trim().length === 0 || enteredAge.trim().length === 0) {
       setError({
         title: "Invalid input",
@@ -29,12 +32,9 @@ const AddUser = (props) => {
       return;
     }
     props.onAddUser(enteredUsername, enteredAge);
-    setEnteredUsername("");
+    // Use DOM API to directly set the value for the element
+    usernameInputRef.current.value = "";
     setEnteredAge("");
-  };
-
-  const usernameChangHandler = (event) => {
-    setEnteredUsername(event.target.value);
   };
 
   const ageChangHandler = (event) => {
@@ -57,12 +57,7 @@ const AddUser = (props) => {
       <Card className={classes.input}>
         <form onSubmit={addUserHandler}>
           <label>Username</label>
-          <input
-            id="username"
-            type="text"
-            value={enteredUsername}
-            onChange={usernameChangHandler}
-          />
+          <input id="username" type="text" ref={usernameInputRef} />
           <label>Age (Years)</label>
           <input
             id="age"
